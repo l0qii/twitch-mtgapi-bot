@@ -1,0 +1,2 @@
+-e git://github.com/EvieePy/TwitchIO.git#egg=TwitchIO
+-e git://github.com/MagicTheGathering/mtg-sdk-python.git#egg=mtg-sdk-python
