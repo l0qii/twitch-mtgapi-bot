@@ -32,7 +32,7 @@ class Mbot(tcommands.TwitchBot):
             card = cards[0]
             if 'creature' in card.type.lower():
                 response = '\\\\{}// {} {}/{}, {} -- {}'.format(card.name, card.type, card.power, card.toughness, card.mana_cost, card.text)
-            elif 'planewalker' in card.type.lower():
+            elif 'planeswalker' in card.type.lower():
                 response = '\\\\{}// {} (Loyalty: {}), {} -- {}'.format(card.name, card.type, card.loyalty, card.mana_cost, card.text)
             else:
                 response = '\\\\{}// {}, {} -- {}'.format(card.name, card.type, card.mana_cost, card.text)
