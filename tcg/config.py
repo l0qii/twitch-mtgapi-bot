@@ -1,0 +1,1 @@
+__endpoint__ = "http://api.tcgplayer.com/"

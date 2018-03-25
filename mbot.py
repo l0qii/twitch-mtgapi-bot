@@ -1,11 +1,13 @@
 from twitchio import commands as tcommands
 import os
+import requests
 from mtgsdk import Card
-from mtgsdk import Set
-from mtgsdk import Type
-from mtgsdk import Supertype
-from mtgsdk import Subtype
-from mtgsdk import Changelog
+# from mtgsdk import Set
+# from mtgsdk import Type
+# from mtgsdk import Supertype
+# from mtgsdk import Subtype
+# from mtgsdk import Changelog
+from tcg import *
 
 class Mbot(tcommands.TwitchBot):
     """Create our IRC Twitch Bot.
@@ -38,6 +40,11 @@ class Mbot(tcommands.TwitchBot):
                 response = '\\\\{}// {}, {} -- {}'.format(card.name, card.type, card.mana_cost, card.text)
         await ctx.send(response)
 
-bot = Mbot()
-bot.run()
+# bot = Mbot()
+# bot.run()
 
+tcg = Tcg()
+try:
+    print(tcg.getPrice("gaea's cradle", "urza's saga"))
+except ValueError as e:
+    print(e)
