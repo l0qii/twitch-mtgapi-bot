@@ -1,5 +1,6 @@
 from twitchio import commands as tcommands
 import os
+import json
 import requests
 from mtgsdk import Card
 # from mtgsdk import Set
@@ -7,7 +8,8 @@ from mtgsdk import Card
 # from mtgsdk import Supertype
 # from mtgsdk import Subtype
 # from mtgsdk import Changelog
-from tcg import *
+from tcg import Tcg
+from mtgparser import MtgParser
 
 class Mbot(tcommands.TwitchBot):
     """Create our IRC Twitch Bot.
@@ -40,11 +42,23 @@ class Mbot(tcommands.TwitchBot):
                 response = '\\\\{}// {}, {} -- {}'.format(card.name, card.type, card.mana_cost, card.text)
         await ctx.send(response)
 
-# bot = Mbot()
-# bot.run()
+    @tcommands.twitch_command(aliases=['price'])
+    async def card_price(self, ctx):
+        response = 'card not found {}'.format(ctx.content[6:])
+        parser = MtgParser()
+        parse_result = json.loads(parser.test(ctx.content[6:]))
+        tcg = Tcg()
+        tcg_result = tcg.getPrice(parse_result.get('name'), parse_result.get('set'))
+        if tcg_result:
+            response = '{} from {} is currently selling at ${}'.format(parse_result.get('name'), parse_result.get('set'), tcg_result)
+        await ctx.send(response)
 
-tcg = Tcg()
-try:
-    print(tcg.getPrice("gaea's cradle", "urza's saga"))
-except ValueError as e:
-    print(e)
+bot = Mbot()
+bot.run()
+
+# parser = MtgParser()
+# result = json.loads(parser.test("unlimited black lotus"))
+# print(result)
+# result = json.loads(parser.test("gaea's cradle urza's saga"))
+# print(result)
+

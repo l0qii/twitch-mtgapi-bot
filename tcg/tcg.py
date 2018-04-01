@@ -27,10 +27,13 @@ class Tcg:
 
     def getPrice(self, card, set):
         json_data = self.__priceLookup(self.__getProductDetails(self.__getCategoryProducts(card, set)))
-        if json_data['success'] == True:
-            return format(float(json_data['results'][0]['price']), '.2f')
+        if 'success' in json_data:
+            if json_data['success'] == True:
+                return format(float(json_data['results'][0]['price']), '.2f')
+            else:
+                raise ValueError(json_data.get('errors')[0])
         else:
-            raise ValueError(json_data.get('errors')[0])
+            raise ValueError("Lookup Unsuccessful")
 
     def __priceLookup(self, productConditionId):
         url = "http://api.tcgplayer.com/pricing/marketprices/{}".format(str(productConditionId))
@@ -54,7 +57,6 @@ class Tcg:
         headers = self.__getHeaders()
         response = requests.post(url, headers=headers, data=payload)
         json_data = response.json()
-        print(payload)
         if json_data['totalItems'] > 0:
             json_data = response.json()['results']
             return ','.join(str(x) for x in json_data)
