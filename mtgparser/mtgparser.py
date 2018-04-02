@@ -1,24 +1,27 @@
 import json
-import os.path
+import os
 
 class MtgParser:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-    def test(self, text):
+    def __init__(self):
+        self._set_data = json.load(open(os.path.join(self.BASE_DIR, 'data/sets.json')))
+        self._card_data = json.load(open(os.path.join(self.BASE_DIR, 'data/mtg_card_names.json')))
+        self._card_names = [x.get('name') for x in self._card_data.get('cards')]
+
+
+    def parse(self, text):
         result = {}
-        set_data = json.load(open(os.path.join(self.BASE_DIR, 'data/sets.json')))
-        card_data = json.load(open(os.path.join(self.BASE_DIR, 'data/mtg_card_names.json')))
         # result = [x for x in set_data.get('sets') if (text.lower() in x.get('name').lower())
         #           or (text.lower() in x.get('synonyms').lower())]
         # print(result)
 
-        card_names = [x.get('name') for x in card_data.get('cards')]
-        set_names = [x.get('name') for x in set_data.get('sets')]
-        set_abrs = [x.get('abbreviation') for x in set_data.get('sets') if x.get('abbreviation') != None]
-        synsets = [x.get('synonyms') for x in set_data.get('sets') if len(x.get('synonyms')) > 0]
+        # set_names = [x.get('name') for x in set_data.get('sets')]
+        # set_abrs = [x.get('abbreviation') for x in set_data.get('sets') if x.get('abbreviation') != None]
+        # synsets = [x.get('synonyms') for x in set_data.get('sets') if len(x.get('synonyms')) > 0]
 
         result['set'] = ""
-        for set in set_data.get('sets'):
+        for set in self._set_data.get('sets'):
             if set.get('name').lower() in text.lower():
                 result['set'] = set.get('name')
             if set.get('abbreviation') is not None:
@@ -30,10 +33,16 @@ class MtgParser:
                         result['set'] = set.get('name')
 
         result['name'] = ""
-        for card_name in card_names:
+        for card_name in self._card_names:
             if card_name.lower() in text.lower() and len(card_name) > len(result['name']):
                 result['name'] = card_name
         return json.dumps(result)
+
+    def nameExists(self, text):
+        if text.lower() in [x.lower() for x in self._card_names]:
+            return True
+        else:
+            return False
 
     def __ngrams(self, input, n):
         input = input.split(' ')

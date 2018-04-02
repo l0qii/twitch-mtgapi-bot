@@ -18,6 +18,7 @@ class Mbot(tcommands.TwitchBot):
     def __init__(self):
         super().__init__(prefix=['!', '?'], token=os.environ['IRC_TOKEN'], api_token='API_TOKEN', client_id='CLIENT_ID',
                          nick='onulet', initial_channels=['#kevin_spicy'])
+        self._parser = MtgParser()
 
     async def event_ready(self):
         """Event called when the bot is ready to go!"""
@@ -31,7 +32,10 @@ class Mbot(tcommands.TwitchBot):
     @tcommands.twitch_command(aliases=['card'])
     async def card_lookup(self, ctx):
         response = 'card not found {}'.format(ctx.content[6:])
-        cards = Card.where(name=ctx.content[6:]).all()
+        cardname = ctx.content[6:]
+        if self._parser.nameExists(cardname):
+            cardname = '"' + cardname + '"'
+        cards = Card.where(name=cardname).all()
         if cards:
             card = cards[0]
             if 'creature' in card.type.lower():
@@ -45,13 +49,12 @@ class Mbot(tcommands.TwitchBot):
     @tcommands.twitch_command(aliases=['price'])
     async def card_price(self, ctx):
         response = 'card not found {}'.format(ctx.content[6:])
-        parser = MtgParser()
-        parse_result = json.loads(parser.test(ctx.content[6:]))
+        parse_result = json.loads(self._parser.parse(ctx.content[6:]))
         tcg = Tcg()
         try:
             tcg_result = json.loads(tcg.getPrice(parse_result.get('name'), parse_result.get('set')))
             if 'error' in tcg_result:
-                response = rcg_results.get('error')
+                response = tcg_result.get('error')
             if tcg_result:
                 response = '{} from {} is currently selling at ${}'.format(parse_result.get('name'), parse_result.get('set'), tcg_result.get('price'))
         except ValueError as e:
@@ -63,10 +66,13 @@ bot.run()
 
 
 # parser = MtgParser()
-# parse_result = json.loads(parser.test("unlimited black lotus"))
+# parse_result = json.loads(parser.parse("unlimited black lotus"))
 # tcg = Tcg()
 # tcg_result = json.loads(tcg.getPrice("city of traitors", "exodus"))
 # print(str(tcg_result.get('price')))
-# result = json.loads(parser.test("gaea's cradle urza's saga"))
+# result = json.loads(parser.parse("gaea's cradle urza's saga"))
 # print(result)
 
+# cards = Card.where(name='"ow"').all()
+# card = cards[0]
+# print(card.name)
