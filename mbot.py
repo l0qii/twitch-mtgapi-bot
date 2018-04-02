@@ -61,15 +61,16 @@ class Mbot(tcommands.TwitchBot):
             response = e
         await ctx.send(response)
 
-bot = Mbot()
-bot.run()
+# bot = Mbot()
+# bot.run()
 
 
-# parser = MtgParser()
-# parse_result = json.loads(parser.parse("unlimited black lotus"))
-# tcg = Tcg()
-# tcg_result = json.loads(tcg.getPrice("city of traitors", "exodus"))
-# print(str(tcg_result.get('price')))
+parser = MtgParser()
+parse_result = json.loads(parser.parse("island unglued"))
+print(parse_result)
+tcg = Tcg()
+tcg_result = json.loads(tcg.getPrice("city of traitors", "exodus"))
+print(str(tcg_result.get('price')))
 # result = json.loads(parser.parse("gaea's cradle urza's saga"))
 # print(result)
 

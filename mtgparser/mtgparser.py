@@ -22,14 +22,14 @@ class MtgParser:
 
         result['set'] = ""
         for set in self._set_data.get('sets'):
-            if set.get('name').lower() in text.lower():
+            if set.get('name').lower() in text.lower() and len(set.get('name')) > len(result['set']):
                 result['set'] = set.get('name')
             if set.get('abbreviation') is not None:
                 if set.get('abbreviation').lower() in text.lower():
                     result['set'] = set.get('name')
             if len(set.get('synonyms')) > 0:
                 for synonym in set.get('synonyms'):
-                    if synonym.lower() in text.lower():
+                    if synonym.lower() in text.lower() and len(synonym) > len(result['set']):
                         result['set'] = set.get('name')
 
         result['name'] = ""
