@@ -48,17 +48,25 @@ class Mbot(tcommands.TwitchBot):
         parser = MtgParser()
         parse_result = json.loads(parser.test(ctx.content[6:]))
         tcg = Tcg()
-        tcg_result = tcg.getPrice(parse_result.get('name'), parse_result.get('set'))
-        if tcg_result:
-            response = '{} from {} is currently selling at ${}'.format(parse_result.get('name'), parse_result.get('set'), tcg_result)
+        try:
+            tcg_result = json.loads(tcg.getPrice(parse_result.get('name'), parse_result.get('set')))
+            if 'error' in tcg_result:
+                response = rcg_results.get('error')
+            if tcg_result:
+                response = '{} from {} is currently selling at ${}'.format(parse_result.get('name'), parse_result.get('set'), tcg_result.get('price'))
+        except ValueError as e:
+            response = e
         await ctx.send(response)
 
 bot = Mbot()
 bot.run()
 
+
 # parser = MtgParser()
-# result = json.loads(parser.test("unlimited black lotus"))
-# print(result)
+# parse_result = json.loads(parser.test("unlimited black lotus"))
+# tcg = Tcg()
+# tcg_result = json.loads(tcg.getPrice("city of traitors", "exodus"))
+# print(str(tcg_result.get('price')))
 # result = json.loads(parser.test("gaea's cradle urza's saga"))
 # print(result)
 

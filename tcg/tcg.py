@@ -1,39 +1,25 @@
 import os
+import json
 import requests
 from tcg.config import __endpoint__
 
 class Tcg:
     CATEGORYID = 1  # 1 is the Id for Mtg
-    NOT_FOUND_ERR = "Card not found"
-
-    # def getProductConditionId(self, card):
-    #     payload = {'categoryId': '1', 'productName': card}
-    #     url = "http://api.tcgplayer.com/catalog/products"
-    #     headers = self.__getHeaders()
-    #     response = requests.get(url, headers=headers, params=payload)
-    #     data = response.json()
-    #     productConditionId = data['results'][0]['productConditions'][0]['productConditionId']
-    #     print(self.getPrice(productConditionId))
-    #
-    # def getGroupId(self, set):
-    #     payload = {'categoryId': '1', 'name': set}
-    #     url = "http://api.tcgplayer.com/catalog/groups"
-    #     headers = self.__getHeaders()
-    #     response = requests.get(url, headers=headers, params=payload)
-    #     data = response.json()
-    #     # print(data)
-    #     # productConditionId = data['results'][0]['productConditions'][0]['productConditionId']
-    #     print(data)
+    NOT_FOUND_ERR = "Hmm, doesn't look like a valid card to me, are you sure you spelled it right?"
+    MISSING_ERR = "You need to supply both a card name and a set name for me to check the price"
 
     def getPrice(self, card, set):
+        result = {}
         json_data = self.__priceLookup(self.__getProductDetails(self.__getCategoryProducts(card, set)))
         if 'success' in json_data:
             if json_data['success'] == True:
-                return format(float(json_data['results'][0]['price']), '.2f')
+                result['price'] = format(float(json_data['results'][0]['price']), '.2f')
+                return json.dumps(result)
             else:
                 raise ValueError(json_data.get('errors')[0])
         else:
-            raise ValueError("Lookup Unsuccessful")
+            print(json_data)
+            raise ValueError(self.MISSING_ERR)
 
     def __priceLookup(self, productConditionId):
         url = "http://api.tcgplayer.com/pricing/marketprices/{}".format(str(productConditionId))
