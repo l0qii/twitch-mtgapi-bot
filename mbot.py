@@ -37,13 +37,21 @@ class Mbot(tcommands.TwitchBot):
             cardname = '"' + cardname + '"'
         cards = Card.where(name=cardname).all()
         if cards:
+
+            # put together a nice list of some sets
+            cardsets = [card.set for card in sorted(cards, key=lambda x: x.set)]
+            if len(cardsets) > 6:
+                cardsettext = '[' + ','.join(cardsets[:6]) + '... +' + str((len(cardsets) - 6)) + ' more]'
+            else:
+                cardsettext = '[' + ','.join(cardsets) + ']'
+
             card = cards[0]
             if 'creature' in card.type.lower():
-                response = '\\\\{}// {} {}/{}, {} -- {}'.format(card.name, card.type, card.power, card.toughness, card.mana_cost, card.text)
+                response = '\\\\{}// {} {}/{}, {} -- {} {}'.format(card.name, card.type, card.power, card.toughness, card.mana_cost, card.text, cardsettext)
             elif 'planeswalker' in card.type.lower():
-                response = '\\\\{}// {} (Loyalty: {}), {} -- {}'.format(card.name, card.type, card.loyalty, card.mana_cost, card.text)
+                response = '\\\\{}// {} (Loyalty: {}), {} -- {} {}'.format(card.name, card.type, card.loyalty, card.mana_cost, card.text, cardsettext)
             else:
-                response = '\\\\{}// {}, {} -- {}'.format(card.name, card.type, card.mana_cost, card.text)
+                response = '\\\\{}// {}, {} -- {} {}'.format(card.name, card.type, card.mana_cost, card.text, cardsettext)
         await ctx.send(response)
 
     @tcommands.twitch_command(aliases=['price'])
@@ -61,8 +69,8 @@ class Mbot(tcommands.TwitchBot):
             response = e
         await ctx.send(response)
 
-bot = Mbot()
-bot.run()
+# bot = Mbot()
+# bot.run()
 
 
 # parser = MtgParser()
@@ -74,6 +82,12 @@ bot.run()
 # result = json.loads(parser.parse("gaea's cradle urza's saga"))
 # print(result)
 
-# cards = Card.where(name='"ow"').all()
-# card = cards[0]
+cards = Card.where(name='stone rain').all()
+cardsets = [card.set for card in sorted(cards, key=lambda x: x.set)]
+if len(cardsets) > 6:
+    print('[' + ','.join(cardsets[:6]) + '... +' + str((len(cardsets) - 6)) + ' more]')
+else:
+    print('[' + ','.join(cardsets) + ']')
+
+# print(len(cards))
 # print(card.name)

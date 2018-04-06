@@ -44,13 +44,13 @@ class MtgParser:
         else:
             return False
 
-    def __ngrams(self, input, n):
-        input = input.split(' ')
-        output = []
-        for i in range(len(input) - n + 1):
-            output.append(input[i:i + n])
-        return output
-
-    def __matchWord(self, inputText, toFindText):
-        print(set(inputText) & set(toFindText))
-        return set(inputText) & set([x.lower() for x in toFindText])
+    # def __ngrams(self, input, n):
+    #     input = input.split(' ')
+    #     output = []
+    #     for i in range(len(input) - n + 1):
+    #         output.append(input[i:i + n])
+    #     return output
+    #
+    # def __matchWord(self, inputText, toFindText):
+    #     print(set(inputText) & set(toFindText))
+    #     return set(inputText) & set([x.lower() for x in toFindText])
