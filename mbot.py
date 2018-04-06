@@ -69,8 +69,8 @@ class Mbot(tcommands.TwitchBot):
             response = e
         await ctx.send(response)
 
-# bot = Mbot()
-# bot.run()
+bot = Mbot()
+bot.run()
 
 
 # parser = MtgParser()
@@ -81,13 +81,5 @@ class Mbot(tcommands.TwitchBot):
 # print(str(tcg_result.get('price')))
 # result = json.loads(parser.parse("gaea's cradle urza's saga"))
 # print(result)
-
-cards = Card.where(name='stone rain').all()
-cardsets = [card.set for card in sorted(cards, key=lambda x: x.set)]
-if len(cardsets) > 6:
-    print('[' + ','.join(cardsets[:6]) + '... +' + str((len(cardsets) - 6)) + ' more]')
-else:
-    print('[' + ','.join(cardsets) + ']')
-
 # print(len(cards))
 # print(card.name)
