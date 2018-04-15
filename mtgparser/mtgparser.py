@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 class MtgParser:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -8,6 +9,7 @@ class MtgParser:
         self._set_data = json.load(open(os.path.join(self.BASE_DIR, 'data/sets.json')))
         self._card_data = json.load(open(os.path.join(self.BASE_DIR, 'data/mtg_card_names.json')))
         self._card_names = [x.get('name') for x in self._card_data.get('cards')]
+        self._mtg_data = json.load(open(os.path.join(self.BASE_DIR, 'data/mtgfulldb.json')))
 
 
     def parse(self, text):
@@ -20,24 +22,48 @@ class MtgParser:
         # set_abrs = [x.get('abbreviation') for x in set_data.get('sets') if x.get('abbreviation') != None]
         # synsets = [x.get('synonyms') for x in set_data.get('sets') if len(x.get('synonyms')) > 0]
 
-        result['set'] = ""
+        result['set'] = []
         for set in self._set_data.get('sets'):
             if set.get('name').lower() in text.lower() and len(set.get('name')) > len(result['set']):
-                result['set'] = set.get('name')
+                    result['set'].append(set.get('name'))
             if set.get('abbreviation') is not None:
-                if set.get('abbreviation').lower() in text.lower():
-                    result['set'] = set.get('name')
+                # for readability
+                s = set.get('abbreviation').lower()
+                # don't match an abbr if it's in the middle of another word
+                if re.search('[^\w]{}[^\w]|^{}[^\w]|[^\w]{}$'.format(s, s, s), text.lower()):
+                    if not set.get('name') in result['set']:
+                        result['set'].append(set.get('name'))
             if len(set.get('synonyms')) > 0:
                 for synonym in set.get('synonyms'):
-                    if synonym.lower() in text.lower() and len(synonym) > len(result['set']):
-                        result['set'] = set.get('name')
-
+                    if re.search('[^\w]{}[^\w]|^{}[^\w]|[^\w]{}$'.format(synonym.lower(), synonym.lower(), synonym.lower()), text.lower()) and len(synonym) > len(result['set']):
+                        if not set.get('name') in result['set']:
+                            result['set'].append(set.get('name'))
+        # payload = "{ 'filters': [ { 'name': 'productName', 'values':  ['\"serum visions\"']  }, { 'name': 'setName', 'values':  ['"+','.join('"'+item+'"' for item in result['set'])+"']  } ]}"
+        # print(payload)
         result['name'] = ""
         for card_name in self._card_names:
             if card_name.lower() in text.lower() and len(card_name) > len(result['name']):
                 result['name'] = card_name
+
+        # validate set array
+        for set in result['set']:
+            if not self.isInSet(result['name'], set):
+                result['set'].remove(set)
+
+        # if no set, set as default
+        if len(result['set']) == 0:
+            result['set'].append([x['defaultset'] for x in self._mtg_data['cards'] if x['name'] == result['name']][0])
+
         return json.dumps(result)
 
+    # check if a card is in a set
+    def isInSet(self, card, set):
+        for c in self._mtg_data['cards']:
+            if c['name'].lower() == card.lower() and set.lower() in [x.lower() for x in c['sets']]:
+                return True
+        return False
+
+    # check if a card name exists
     def nameExists(self, text):
         if text.lower() in [x.lower() for x in self._card_names]:
             return True

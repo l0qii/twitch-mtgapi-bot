@@ -64,7 +64,7 @@ class Mbot(tcommands.TwitchBot):
             if 'error' in tcg_result:
                 response = tcg_result.get('error')
             if tcg_result:
-                response = '{} from {} is currently selling at ${}'.format(parse_result.get('name'), parse_result.get('set'), tcg_result.get('price'))
+                response = '{} from {} is currently selling at ${}'.format(parse_result.get('name'), parse_result.get('set')[0], tcg_result.get('price'))
         except ValueError as e:
             response = e
         await ctx.send(response)
@@ -74,7 +74,10 @@ bot.run()
 
 
 # parser = MtgParser()
-# parse_result = json.loads(parser.parse("island unglued"))
+# print(parser.isInSet('serum visions', 'dsadsa'))
+# parse_result = json.loads(parser.parse("island unglued"))     # test card part of another card (Island in Tropical Island)
+# parse_result = json.loads(parser.parse("serum visions fifth dawn"))     # test ambiguity in set name (Visions in Serum Visions)
+# parse_result = json.loads(parser.parse("black lotus"))      # basic test of default set (need more variations)
 # print(parse_result)
 # tcg = Tcg()
 # tcg_result = json.loads(tcg.getPrice("city of traitors", "exodus"))

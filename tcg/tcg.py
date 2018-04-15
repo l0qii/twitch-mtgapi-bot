@@ -5,14 +5,15 @@ from tcg.config import __endpoint__
 
 class Tcg:
     CATEGORYID = 1  # 1 is the Id for Mtg
-    NOT_FOUND_ERR = "Hmm, doesn't look like a valid card to me, are you sure you spelled it right?"
-    MISSING_ERR = "You need to supply both a card name and a set name for me to check the price"
+    NOT_FOUND_ERR = "That doesn't look like a valid card to me, are you sure you spelled it right?"
+    MISSING_ERR = "Hey I'm pretty smart, but I'm having trouble understanding what you're looking for"
 
     def getPrice(self, card, set):
         result = {}
         json_data = self.__priceLookup(self.__getProductDetails(self.__getCategoryProducts(card, set)))
         if 'success' in json_data:
             if json_data['success'] == True:
+                print(json_data)
                 result['price'] = format(float(json_data['results'][0]['price']), '.2f')
                 return json.dumps(result)
             else:
@@ -36,7 +37,7 @@ class Tcg:
 
     def __getCategoryProducts(self, _card, _set):
         card = "{}".format(_card).replace("'", "\\'")
-        set = "{}".format(_set).replace("'", "\\'")
+        set = "{}".format(','.join('"'+item+'"' for item in _set)).replace("'", "\\'")
         payload = "{ 'filters': [ { 'name': 'productName', 'values':  ['"+card+"']  }, { 'name': 'setName', 'values':  ['"+set+"']  } ]}"
         # payload = {'productName': card, 'setName': set}
         url = "{}/catalog/categories/{}/search".format(__endpoint__, self.CATEGORYID)
