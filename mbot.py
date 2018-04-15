@@ -58,6 +58,7 @@ class Mbot(tcommands.TwitchBot):
     async def card_price(self, ctx):
         response = 'card not found {}'.format(ctx.content[6:])
         parse_result = json.loads(self._parser.parse(ctx.content[6:]))
+        print(parse_result)
         tcg = Tcg()
         try:
             tcg_result = json.loads(tcg.getPrice(parse_result.get('name'), parse_result.get('set')))
@@ -78,6 +79,7 @@ bot.run()
 # parse_result = json.loads(parser.parse("island unglued"))     # test card part of another card (Island in Tropical Island)
 # parse_result = json.loads(parser.parse("serum visions fifth dawn"))     # test ambiguity in set name (Visions in Serum Visions)
 # parse_result = json.loads(parser.parse("black lotus"))      # basic test of default set (need more variations)
+# parse_result = json.loads(parser.parse("Mockery of Nature"))
 # print(parse_result)
 # tcg = Tcg()
 # tcg_result = json.loads(tcg.getPrice("city of traitors", "exodus"))

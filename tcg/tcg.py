@@ -13,7 +13,7 @@ class Tcg:
         json_data = self.__priceLookup(self.__getProductDetails(self.__getCategoryProducts(card, set)))
         if 'success' in json_data:
             if json_data['success'] == True:
-                print(json_data)
+                # print(json_data)
                 result['price'] = format(float(json_data['results'][0]['price']), '.2f')
                 return json.dumps(result)
             else:

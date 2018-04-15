@@ -7,10 +7,8 @@ class MtgParser:
 
     def __init__(self):
         self._set_data = json.load(open(os.path.join(self.BASE_DIR, 'data/sets.json')))
-        self._card_data = json.load(open(os.path.join(self.BASE_DIR, 'data/mtg_card_names.json')))
-        self._card_names = [x.get('name') for x in self._card_data.get('cards')]
         self._mtg_data = json.load(open(os.path.join(self.BASE_DIR, 'data/mtgfulldb.json')))
-
+        self._card_names = [x.get('name') for x in self._mtg_data.get('cards')]
 
     def parse(self, text):
         result = {}
@@ -43,6 +41,7 @@ class MtgParser:
         result['name'] = ""
         for card_name in self._card_names:
             if card_name.lower() in text.lower() and len(card_name) > len(result['name']):
+                print(card_name)
                 result['name'] = card_name
 
         # validate set array
