@@ -37,9 +37,8 @@ class Tcg:
 
     def __getCategoryProducts(self, _card, _set):
         card = "{}".format(_card).replace("'", "\\'")
-        set = "{}".format(','.join('"'+item+'"' for item in _set)).replace("'", "\\'")
+        set = "{}".format(','.join(item for item in _set)).replace("'", "\\'")
         payload = "{ 'filters': [ { 'name': 'productName', 'values':  ['"+card+"']  }, { 'name': 'setName', 'values':  ['"+set+"']  } ]}"
-        # payload = {'productName': card, 'setName': set}
         url = "{}/catalog/categories/{}/search".format(__endpoint__, self.CATEGORYID)
         headers = self.__getHeaders()
         response = requests.post(url, headers=headers, data=payload)

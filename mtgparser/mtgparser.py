@@ -41,7 +41,6 @@ class MtgParser:
         result['name'] = ""
         for card_name in self._card_names:
             if card_name.lower() in text.lower() and len(card_name) > len(result['name']):
-                print(card_name)
                 result['name'] = card_name
 
         # validate set array
@@ -51,7 +50,9 @@ class MtgParser:
 
         # if no set, set as default
         if len(result['set']) == 0:
-            result['set'].append([x['defaultset'] for x in self._mtg_data['cards'] if x['name'] == result['name']][0])
+            default = [x['defaultset'] for x in self._mtg_data['cards'] if x['name'] == result['name']][0]
+            default = [x['name'] for x in self._set_data['sets'] if default in x['synonyms'] or x['name'] == default][0]
+            result['set'].append(default)
 
         return json.dumps(result)
 
