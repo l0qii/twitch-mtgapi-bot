@@ -58,7 +58,6 @@ class Mbot(tcommands.TwitchBot):
     async def card_price(self, ctx):
         response = 'card not found {}'.format(ctx.content[6:])
         parse_result = json.loads(self._parser.parse(ctx.content[6:]))
-        print(parse_result)
         tcg = Tcg()
         try:
             tcg_result = json.loads(tcg.getPrice(parse_result.get('name'), parse_result.get('set')))
@@ -72,22 +71,3 @@ class Mbot(tcommands.TwitchBot):
 
 bot = Mbot()
 bot.run()
-
-
-# parser = MtgParser()
-# print(parser.isInSet('serum visions', 'dsadsa'))
-# parse_result = json.loads(parser.parse("island unglued"))     # test card part of another card (Island in Tropical Island)
-# parse_result = json.loads(parser.parse("serum visions fifth dawn"))     # test ambiguity in set name (Visions in Serum Visions)
-# parse_result = json.loads(parser.parse("black lotus"))      # basic test of default set (need more variations)
-# parse_result = json.loads(parser.parse("diabolic tutor"))      # synonym set is default
-# parse_result = json.loads(parser.parse("black lotus"))   # another name test
-# parse_result = json.loads(parser.parse("birds of paradise"))    # basic set name is default
-# tcg = Tcg()
-# tcg_result = json.loads(tcg.getPrice(parse_result.get('name'), parse_result.get('set')))
-# tcg_result = json.loads(tcg.getPrice("city of traitors", ["exodus"]))
-# tcg_result = json.loads(tcg.getPrice("city of traitors", ["exodus"]))
-# print(str(tcg_result.get('price')))
-# result = json.loads(parser.parse("gaea's cradle urza's saga"))
-# print(result)
-# print(len(cards))
-# print(card.name)
