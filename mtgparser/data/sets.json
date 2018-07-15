@@ -1,4 +1,9 @@
 {"sets":[
+  {"tcgGroupId":2251,"name":"Commander 2018","abbreviation":"C18","supplemental":true,"synonyms":[]},
+  {"tcgGroupId":2250,"name":"Core Set 2019","abbreviation":"M19","supplemental":false,"synonyms":[]},
+  {"tcgGroupId":2247,"name":"Global Series Jiang Yanggu & Mu Yanling","abbreviation":"GS1","supplemental":false,"synonyms":[]},
+  {"tcgGroupId":2245,"name":"Battlebond","abbreviation":"BBD","supplemental":false,"synonyms":[]},
+  {"tcgGroupId":2246,"name":"Commander Anthology Volume II","abbreviation":"CM2","supplemental":true,"synonyms":[]},
 {"tcgGroupId":2220,"name":"Signature Spellbook: Jace","abbreviation":"SS1","supplemental":true,"synonyms":[]},
 {"tcgGroupId":2199,"name":"Dominaria","abbreviation":"DOM","supplemental":false,"synonyms":[]},
 {"tcgGroupId":2203,"name":"Challenger Decks","abbreviation":"Q01","supplemental":true,"synonyms":[]},
