@@ -1,73 +1,34 @@
 from twitchio import commands as tcommands
+from commands import Commands
 import os
-import json
-import requests
-from mtgsdk import Card
-# from mtgsdk import Set
-# from mtgsdk import Type
-# from mtgsdk import Supertype
-# from mtgsdk import Subtype
-# from mtgsdk import Changelog
-from tcg import Tcg
-from mtgparser import MtgParser
 
 class Mbot(tcommands.TwitchBot):
     """Create our IRC Twitch Bot.
     api_token is optional, but without it, you will not be able to make certain calls to the API."""
 
+    NICK = 'onulet'
+
     def __init__(self):
         super().__init__(prefix=['!', '?'], token=os.environ['IRC_TOKEN'], api_token='API_TOKEN', client_id='CLIENT_ID',
-                         nick='onulet', initial_channels=['#kevin_spicy'])
-        self._parser = MtgParser()
+                         nick=self.NICK, initial_channels=['#kevin_spicy','#rexhavoc'])
+        self._commands = Commands()
 
     async def event_ready(self):
         """Event called when the bot is ready to go!"""
         print('READY!')
 
-    # async def event_message(self, message):
-    #     """Event called when a message is sent to a channel you are in."""
-    #     if message.content == 'Hello':
-    #         await message.send('World!')
+    async def event_message(self, message):
+        """Event called when a message is sent to a channel you are in."""
+        if message.content[:len(self.NICK)+1] == '@{}'.format(self.NICK):
+            await message.send('@{} totally'.format(message.author.name))
 
     @tcommands.twitch_command(aliases=['card'])
     async def card_lookup(self, ctx):
-        response = 'card not found {}'.format(ctx.content[6:])
-        cardname = ctx.content[6:]
-        if self._parser.nameExists(cardname):
-            cardname = '"' + cardname + '"'
-        cards = Card.where(name=cardname).all()
-        if cards:
-
-            # put together a nice list of some sets
-            cardsets = [card.set for card in sorted(cards, key=lambda x: x.set)]
-            if len(cardsets) > 6:
-                cardsettext = '[' + ','.join(cardsets[:6]) + '... +' + str((len(cardsets) - 6)) + ' more]'
-            else:
-                cardsettext = '[' + ','.join(cardsets) + ']'
-
-            card = cards[0]
-            if 'creature' in card.type.lower():
-                response = '\\\\{}// {} {}/{}, {} -- {} {}'.format(card.name, card.type, card.power, card.toughness, card.mana_cost, card.text, cardsettext)
-            elif 'planeswalker' in card.type.lower():
-                response = '\\\\{}// {} (Loyalty: {}), {} -- {} {}'.format(card.name, card.type, card.loyalty, card.mana_cost, card.text, cardsettext)
-            else:
-                response = '\\\\{}// {}, {} -- {} {}'.format(card.name, card.type, card.mana_cost, card.text, cardsettext)
-        await ctx.send(response)
+        await ctx.send(self._commands.card(ctx.content[6:]))
 
     @tcommands.twitch_command(aliases=['price'])
     async def card_price(self, ctx):
-        response = 'card not found {}'.format(ctx.content[6:])
-        parse_result = json.loads(self._parser.parse(ctx.content[6:]))
-        tcg = Tcg()
-        try:
-            tcg_result = json.loads(tcg.getPrice(parse_result.get('name'), parse_result.get('set')))
-            if 'error' in tcg_result:
-                response = tcg_result.get('error')
-            if tcg_result:
-                response = '{} from {} is currently selling at ${}'.format(parse_result.get('name'), parse_result.get('set')[0], tcg_result.get('price'))
-        except ValueError as e:
-            response = e
-        await ctx.send(response)
+        await ctx.send(self._commands.price(ctx.content[6:]))
 
 bot = Mbot()
 bot.run()

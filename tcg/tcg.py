@@ -9,6 +9,8 @@ class Tcg:
     MISSING_ERR = "Hey I'm pretty smart, but I'm having trouble understanding what you're looking for"
 
     def getPrice(self, card, set):
+        print(card)
+        print(set)
         result = {}
         json_data = self.__priceLookup(self.__getProductDetails(self.__getCategoryProducts(card, set)))
         if 'success' in json_data:
@@ -43,6 +45,7 @@ class Tcg:
         headers = self.__getHeaders()
         response = requests.post(url, headers=headers, data=payload)
         json_data = response.json()
+        print(json_data)
         if json_data['totalItems'] > 0:
             json_data = response.json()['results']
             return ','.join(str(x) for x in json_data)
