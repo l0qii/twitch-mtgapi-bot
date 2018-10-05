@@ -1,4 +1,4 @@
-from twitchio import commands as tcommands
+from twitchio.ext import commands as tcommands
 from commands import Commands
 import os
 
@@ -9,8 +9,8 @@ class Mbot(tcommands.TwitchBot):
     NICK = 'onulet'
 
     def __init__(self):
-        super().__init__(prefix=['!', '?'], token=os.environ['IRC_TOKEN'], api_token='API_TOKEN', client_id='CLIENT_ID',
-                         nick=self.NICK, initial_channels=['#kevin_spicy','#rexhavoc'])
+        super().__init__(prefix='!', irc_token=os.environ['IRC_TOKEN'], api_token='API_TOKEN', client_id='CLIENT_ID',
+                         nick=self.NICK, initial_channels=['kevin_spicy','rexhavoc'])
         self._commands = Commands()
 
     async def event_ready(self):
@@ -19,14 +19,13 @@ class Mbot(tcommands.TwitchBot):
 
     async def event_message(self, message):
         """Event called when a message is sent to a channel you are in."""
-        if message.content[:len(self.NICK)+1] == '@{}'.format(self.NICK):
-            await message.send('@{} totally'.format(message.author.name))
+        await self.process_commands(message)
 
-    @tcommands.twitch_command(aliases=['card'])
+    @tcommands.twitch_command(name='card')
     async def card_lookup(self, ctx):
         await ctx.send(self._commands.card(ctx.content[6:]))
 
-    @tcommands.twitch_command(aliases=['price'])
+    @tcommands.twitch_command(name='price')
     async def card_price(self, ctx):
         await ctx.send(self._commands.price(ctx.content[6:]))
 

@@ -28,8 +28,11 @@ class Commands:
                 response = '\\\\{}// {} {}/{}, {} -- {} {}'.format(card.name, card.type, card.power, card.toughness, card.mana_cost, card.text, cardsettext)
             elif 'planeswalker' in card.type.lower():
                 response = '\\\\{}// {} (Loyalty: {}), {} -- {} {}'.format(card.name, card.type, card.loyalty, card.mana_cost, card.text, cardsettext)
+            elif hasattr(card, 'mana_cost'):
+                response = '\\\\{}// {}, {} -- {} {}'.format(card.name, card.type, card.mana_cost, card.text,                                                             cardsettext)
             else:
-                response = '\\\\{}// {}, {} -- {} {}'.format(card.name, card.type, card.mana_cost, card.text, cardsettext)
+                # it's a land
+                response = '\\\\{}// {} -- {} {}'.format(card.name, card.type, card.text, cardsettext)
         return response
 
     def price(self, inputString):
