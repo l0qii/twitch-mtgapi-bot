@@ -52,8 +52,10 @@ class Tcg:
         else:
             raise ValueError(self.NOT_FOUND_ERR)
 
+    # API has changed to http://api.tcgplayer.com/catalog/products/{productID}/skus
+    # and only 1 productId can be used at a time. This is balls, and will need to be fixed later
     def __getProductDetails(self, productIds):
-        url = "{}/catalog/products/{}".format(__endpoint__, productIds)
+        url = "{}/v1.14.0/catalog/products/{}".format(__endpoint__, productIds)
         headers = self.__getHeaders()
         response = requests.get(url, headers=headers)
         json_data = response.json()

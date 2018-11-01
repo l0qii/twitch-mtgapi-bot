@@ -4,10 +4,11 @@ from mtgparser import MtgParser
 from commands import Commands
 
 com = Commands()
-result = com.card("tundra")
-print(result)
-# result = com.price("Karn, Scion of Urza")
+# result = com.card("tundra")
 # print(result)
+# result = com.price("Karn, Scion of Urza")
+result = com.price("Tundra")
+print(result)
 
 # parser = MtgParser()
 # print(parser.isInSet('serum visions', 'dsadsa'))
