@@ -4,10 +4,10 @@ from mtgparser import MtgParser
 from commands import Commands
 
 com = Commands()
-# result = com.card("tundra")
+result = com.card("tundra")
 # print(result)
 # result = com.price("Karn, Scion of Urza")
-result = com.price("Tundra")
+# result = com.price("Tundra")
 print(result)
 
 # parser = MtgParser()

@@ -29,5 +29,9 @@ class Mbot(tcommands.TwitchBot):
     async def card_price(self, ctx):
         await ctx.send(self._commands.price(ctx.content[6:]))
 
+    @tcommands.twitch_command(name='shop')
+    async def link_shop(self, ctx):
+        await ctx.send(self._commands.link_shop())
+
 bot = Mbot()
 bot.run()

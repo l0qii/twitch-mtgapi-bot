@@ -50,3 +50,6 @@ class Commands:
         except ValueError as e:
             response = e
         return response
+
+    def link_shop(self):
+        return 'Many of the cards we draft are available for sale! Check it out! https://shop.tcgplayer.com/sellerfeedback/4e426e61'
