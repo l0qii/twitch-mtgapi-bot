@@ -35,7 +35,6 @@ class Mbot(tcommands.Bot):
 
     @tcommands.command(name='uptime')
     async def uptime(self, ctx):
-        print()
         await ctx.send(self._commands.uptime(ctx.channel))
 
 bot = Mbot()

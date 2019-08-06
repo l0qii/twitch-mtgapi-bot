@@ -70,7 +70,6 @@ class Commands:
                    'Client-ID': os.environ['CLIENT_ID']
                    }
         now = datetime.datetime.utcnow()
-        channel = 'thejubjubb'
         result = requests.get('https://api.twitch.tv/helix/streams?user_login={}'.format(channel), headers=headers)
         if len(result.json()['data']) > 0:
             start = result.json()['data'][0]['started_at']
