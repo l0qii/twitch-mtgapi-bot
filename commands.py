@@ -2,6 +2,10 @@ import json
 from mtgsdk import Card
 from tcg import Tcg
 from mtgparser import MtgParser
+import requests
+import os
+import datetime
+
 
 class Commands:
 
@@ -11,6 +15,11 @@ class Commands:
     def card(self, inputString):
         response = 'card not found {}'.format(inputString)
         cardname = inputString
+
+        # kappa
+        if inputString.lower() == 'sunarel\'s waifu':
+            cardname = 'Etrata, the Silencer'
+
         if self._parser.nameExists(cardname):
             cardname = '"' + cardname + '"'
         cards = Card.where(name=cardname).all()
@@ -29,7 +38,7 @@ class Commands:
             elif 'planeswalker' in card.type.lower():
                 response = '\\\\{}// {} (Loyalty: {}), {} -- {} {}'.format(card.name, card.type, card.loyalty, card.mana_cost, card.text, cardsettext)
             elif hasattr(card, 'mana_cost'):
-                response = '\\\\{}// {}, {} -- {} {}'.format(card.name, card.type, card.mana_cost, card.text,                                                             cardsettext)
+                response = '\\\\{}// {}, {} -- {} {}'.format(card.name, card.type, card.mana_cost, card.text, cardsettext)
             else:
                 # it's a land
                 response = '\\\\{}// {} -- {} {}'.format(card.name, card.type, card.text, cardsettext)
@@ -53,3 +62,19 @@ class Commands:
 
     def link_shop(self):
         return 'Many of the cards we draft are available for sale! Check it out! https://shop.tcgplayer.com/sellerfeedback/4e426e61'
+
+    def uptime(self, channel):
+        response = '{} is currently offline'.format(channel)
+        headers = {'Content-Type': 'application/json',
+                   'Accept': 'application/vnd.twitchtv.v5+json',
+                   'Client-ID': os.environ['CLIENT_ID']
+                   }
+        now = datetime.datetime.utcnow()
+        channel = 'thejubjubb'
+        result = requests.get('https://api.twitch.tv/helix/streams?user_login={}'.format(channel), headers=headers)
+        if len(result.json()['data']) > 0:
+            start = result.json()['data'][0]['started_at']
+            dt = datetime.datetime.strptime(start, "%Y-%m-%dT%H:%M:%SZ")
+            # one microfortnight is equal to 1.2096 seconds
+            response = '{} has been streaming for {} microfortnights'.format(channel, round((now - dt).total_seconds() / 1.2096))
+        return response

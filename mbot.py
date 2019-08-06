@@ -2,7 +2,7 @@ from twitchio.ext import commands as tcommands
 from commands import Commands
 import os
 
-class Mbot(tcommands.TwitchBot):
+class Mbot(tcommands.Bot):
     """Create our IRC Twitch Bot.
     api_token is optional, but without it, you will not be able to make certain calls to the API."""
 
@@ -19,19 +19,24 @@ class Mbot(tcommands.TwitchBot):
 
     async def event_message(self, message):
         """Event called when a message is sent to a channel you are in."""
-        await self.process_commands(message)
+        await self.handle_commands(message)
 
-    @tcommands.twitch_command(name='card')
+    @tcommands.command(name='card')
     async def card_lookup(self, ctx):
         await ctx.send(self._commands.card(ctx.content[6:]))
 
-    @tcommands.twitch_command(name='price')
+    @tcommands.command(name='price')
     async def card_price(self, ctx):
         await ctx.send(self._commands.price(ctx.content[6:]))
 
-    @tcommands.twitch_command(name='shop')
+    @tcommands.command(name='shop')
     async def link_shop(self, ctx):
         await ctx.send(self._commands.link_shop())
+
+    @tcommands.command(name='uptime')
+    async def uptime(self, ctx):
+        print()
+        await ctx.send(self._commands.uptime(ctx.channel))
 
 bot = Mbot()
 bot.run()
