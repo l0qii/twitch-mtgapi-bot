@@ -5,14 +5,17 @@ from commands import Commands
 
 com = Commands()
 
-print(com.uptime())
+# print(com.uptime('kevin_spicy'))
 
 # result = com.card("Death\\'s Duet")
+result = com.card("shepherd of the flock") # advtenture card
+# result = com.card("usher to safety") # adventure card
+
 # result = com.card("turret ogre")
 # print(result)
 # result = com.price("Karn, Scion of Urza")
 # result = com.price("Tundra")
-# print(result)
+print(result)
 
 # parser = MtgParser()
 # print(parser.isInSet('serum visions', 'dsadsa'))

@@ -33,7 +33,12 @@ class Commands:
                 cardsettext = '[' + ','.join(cardsets) + ']'
 
             card = cards[0]
-            if 'creature' in card.type.lower():
+            if 'adventure' in card.layout.lower():
+                if hasattr(card, 'power'):
+                    response = '\\\\{}// {} {}/{}, {} -- {}'.format('/'.join(card.names), card.type, card.power, card.toughness, card.mana_cost, cardsettext)
+                else:
+                    response = '\\\\{}// {}, {} -- {} {}'.format('/'.join(card.names), card.type, card.mana_cost, card.text, cardsettext)
+            elif 'creature' in card.type.lower():
                 response = '\\\\{}// {} {}/{}, {} -- {} {}'.format(card.name, card.type, card.power, card.toughness, card.mana_cost, card.text, cardsettext)
             elif 'planeswalker' in card.type.lower():
                 response = '\\\\{}// {} (Loyalty: {}), {} -- {} {}'.format(card.name, card.type, card.loyalty, card.mana_cost, card.text, cardsettext)
