@@ -20,7 +20,7 @@ class Commands:
         if inputString.lower() == 'sunarel\'s waifu':
             cardname = 'Etrata, the Silencer'
 
-        if self._parser.nameExists(cardname):
+        if self._parser.nameExists(cardname.replace('\'', '\\\'')):
             cardname = '"' + cardname + '"'
         cards = Card.where(name=cardname).all()
         if cards:
