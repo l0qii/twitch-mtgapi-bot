@@ -10,14 +10,15 @@ com = Commands()
 # result = com.card("Death\\'s Duet")
 # result = com.card("shepherd of the flock") # adventure card
 # result = com.card("usher to safety") # adventure card
+result = com.card("greater morphling") # long ass name
 
 # result = com.card("turret ogre")
-# print(result)
+print(len(result))
 # result = com.price("Karn, Scion of Urza")
 # result = com.price("Tundra")
 # print(result)
 
-parser = MtgParser()
+# parser = MtgParser()
 # print(parser.isInSet('serum visions', 'dsadsa'))
 # parse_result = json.loads(parser.parse("island unglued"))     # test card part of another card (Island in Tropical Island)
 # parse_result = json.loads(parser.parse("serum visions fifth dawn"))     # test ambiguity in set name (Visions in Serum Visions)
@@ -26,9 +27,9 @@ parser = MtgParser()
 # parse_result = json.loads(parser.parse("black lotus"))   # another name test
 # parse_result = json.loads(parser.parse("birds of paradise"))    # basic set name is default
 # parse_result = json.loads(parser.parse("Karn, Scion of Urza"))  # comma in name
-parse_result = json.loads(parser.parse("gaea's cradle"))  # comma in name
+# parse_result = json.loads(parser.parse("gaea's cradle"))  # comma in name
 # parse_result = json.loads(parser.parse("tundra"))
-print(parse_result)
+# print(parse_result)
 # print(parse_result.get('name'))
 # print(parse_result.get('set'))
 

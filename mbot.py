@@ -1,6 +1,6 @@
 from twitchio.ext import commands as tcommands
 from commands import Commands
-import os
+import os, textwrap
 
 class Mbot(tcommands.Bot):
     """Create our IRC Twitch Bot.
@@ -23,7 +23,10 @@ class Mbot(tcommands.Bot):
 
     @tcommands.command(name='card')
     async def card_lookup(self, ctx):
-        await ctx.send(self._commands.card(ctx.content[6:]))
+        result = self._commands.card(ctx.content[6:])
+        lines = textwrap.wrap(result, 500, break_long_words=False)
+        for line in lines:
+            await ctx.send(line)
 
     # @tcommands.command(name='price')
     # async def card_price(self, ctx):
