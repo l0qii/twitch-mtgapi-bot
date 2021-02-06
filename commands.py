@@ -65,9 +65,9 @@ class Commands:
             response = e
         return response
 
-    def link_shop(self):
-        return 'Many of the cards we draft are available for sale! Check it out! https://shop.tcgplayer.com/sellerfeedback/4e426e61'
-
+    # def link_shop(self):
+    #     return 'Many of the cards we draft are available for sale! Check it out! https://shop.tcgplayer.com/sellerfeedback/4e426e61'
+    #
     def uptime(self, channel):
         response = '{} is currently offline'.format(channel)
         headers = {'Content-Type': 'application/json',

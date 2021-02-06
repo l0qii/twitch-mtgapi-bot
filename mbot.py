@@ -25,13 +25,13 @@ class Mbot(tcommands.Bot):
     async def card_lookup(self, ctx):
         await ctx.send(self._commands.card(ctx.content[6:]))
 
-    @tcommands.command(name='price')
-    async def card_price(self, ctx):
-        await ctx.send(self._commands.price(ctx.content[6:]))
+    # @tcommands.command(name='price')
+    # async def card_price(self, ctx):
+    #     await ctx.send(self._commands.price(ctx.content[6:]))
 
-    @tcommands.command(name='shop')
-    async def link_shop(self, ctx):
-        await ctx.send(self._commands.link_shop())
+    # @tcommands.command(name='shop')
+    # async def link_shop(self, ctx):
+    #     await ctx.send(self._commands.link_shop())
 
     @tcommands.command(name='uptime')
     async def uptime(self, ctx):
