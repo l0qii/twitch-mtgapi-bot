@@ -6,11 +6,11 @@ class Mbot(tcommands.Bot):
     """Create our IRC Twitch Bot.
     api_token is optional, but without it, you will not be able to make certain calls to the API."""
 
-    NICK = 'onulet'
+    NICK = '<Your bots twitch name>'
 
     def __init__(self):
         super().__init__(prefix='!', irc_token=os.environ['IRC_TOKEN'], api_token='API_TOKEN', client_id='CLIENT_ID',
-                         nick=self.NICK, initial_channels=['kevin_spicy','rexhavoc'])
+                         nick=self.NICK, initial_channels=[<your channel>])
         self._commands = Commands()
 
     async def event_ready(self):
